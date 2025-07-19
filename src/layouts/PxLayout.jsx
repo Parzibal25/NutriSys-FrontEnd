@@ -6,7 +6,7 @@ export default function PxLayout() {
 	const { user } = useAuth();
 
 	return (
-		<div>
+		<>
 			<nav className='bg-white p-4 flex justify-between items-center ml-4 mr-4'>
 				<Link to='/' className='flex items-center'>
 					<img
@@ -34,9 +34,9 @@ export default function PxLayout() {
 					</Link>
 				</div>
 			</nav>
-			<main className='pl-3 pr-3'>
+			<main className='pl-3 pr-3 w-full h-full'>
 				<Outlet />
 			</main>
-		</div>
+		</>
 	);
 }

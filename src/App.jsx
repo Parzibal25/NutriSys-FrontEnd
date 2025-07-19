@@ -3,6 +3,7 @@ import nutrisysLogoNoText from '/logo/logo-no-text.svg';
 import './styles/App.css';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
+import CleanLayout from './layouts/CleanLayout';
 import DocLayout from './layouts/DocLayout';
 import PxLayout from './layouts/PxLayout';
 import AdminLayout from './layouts/AdminLayout';
@@ -24,20 +25,23 @@ export default function App() {
 				{/* Paginas publicas (no requieren autenticacion) */}
 				<Route path='/' element={<MainLayout />}>
 					<Route index element={<Landing />} />
-					<Route path='login' element={<Login />} />
+				</Route>
+				{/* Paginas publicas (no requieren autenticacion) */}
+				<Route element={<CleanLayout />}>
+					<Route path='/login' element={<Login />} />
 					<Route
-						path='select-register-type'
+						path='/select-register-type'
 						element={<RegisterSelect />}
 					/>
 					<Route
-						path='register-as-doctor'
+						path='/register-as-doctor'
 						element={<RegisterDoc />}
 					/>
 					<Route
-						path='register-as-patient'
+						path='/register-as-patient'
 						element={<RegisterPx />}
 					/>
-					<Route path='login/admin' element={<LoginAdmin />} />
+					<Route path='/login/admin' element={<LoginAdmin />} />
 				</Route>
 
 				{/* Paginas de administrador */}

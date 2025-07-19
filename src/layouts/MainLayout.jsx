@@ -6,7 +6,7 @@ export default function MainLayout() {
 	const { user } = useAuth();
 
 	return (
-		<div>
+		<>
 			<nav className='bg-white p-4 flex justify-between items-center ml-4 mr-4'>
 				<Link to='/' className='flex items-center'>
 					<img
@@ -21,22 +21,22 @@ export default function MainLayout() {
 
 				<div className='flex gap-4'>
 					<Link
-						to='/'
+						to='/login'
 						className='bg-white border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 text-nutrisys-primary-500 rounded-2xl font-kodchasan font-bold'
 					>
 						Inicia Sesión
 					</Link>
 					<Link
-						to='/login'
+						to='/select-register-type'
 						className='bg-nutrisys-primary-500 border-nutrisys-primary-500 text-white border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl font-kodchasan font-bold'
 					>
 						Regístrate
 					</Link>
 				</div>
 			</nav>
-			<main className='pl-3 pr-3'>
+			<main className='pl-3 pr-3 w-full h-full'>
 				<Outlet />
 			</main>
-		</div>
+		</>
 	);
 }
