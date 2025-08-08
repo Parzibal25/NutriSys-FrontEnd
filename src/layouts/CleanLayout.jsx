@@ -21,7 +21,7 @@ export default function CleanLayout() {
 
 				<div className='flex gap-4'></div>
 			</nav>
-			<main className='pl-3 pr-3 w-full h-full'>
+			<main className='w-full h-full'>
 				<Outlet />
 			</main>
 		</>

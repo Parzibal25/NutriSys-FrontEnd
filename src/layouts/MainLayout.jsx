@@ -1,14 +1,15 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import nutrisysLogoNoText from '/logo/logo-no-text.svg';
+import '../styles/App.css';
 
 export default function MainLayout() {
 	const { user } = useAuth();
 
 	return (
 		<>
-			<nav className='bg-white p-4 flex justify-between items-center ml-4 mr-4'>
-				<Link to='/' className='flex items-center'>
+			<nav className='bg-white flex justify-between items-center pl-4 pr-4 h-24 w-full'>
+				<Link to='/' className='flex items-center horizontal-logo'>
 					<img
 						src={nutrisysLogoNoText}
 						className='logo'
@@ -19,22 +20,22 @@ export default function MainLayout() {
 					</span>
 				</Link>
 
-				<div className='flex gap-4'>
+				<div className='flex gap-4 justify-end max-w-half'>
 					<Link
 						to='/login'
-						className='bg-white border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 text-nutrisys-primary-500 rounded-2xl font-kodchasan font-bold'
+						className='flex bg-white border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 text-nutrisys-primary-500 rounded-2xl font-kodchasan font-bold text-center'
 					>
 						Inicia Sesión
 					</Link>
 					<Link
 						to='/select-register-type'
-						className='bg-nutrisys-primary-500 border-nutrisys-primary-500 text-white border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl font-kodchasan font-bold'
+						className='flex bg-nutrisys-primary-500 border-nutrisys-primary-500 text-white border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl font-kodchasan font-bold text-center items-center'
 					>
 						Regístrate
 					</Link>
 				</div>
 			</nav>
-			<main className='pl-3 pr-3 w-full h-full'>
+			<main className='w-full min-h-fit overflow-x-hidden overflow-y-auto'>
 				<Outlet />
 			</main>
 		</>

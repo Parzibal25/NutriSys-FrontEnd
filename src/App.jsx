@@ -4,6 +4,7 @@ import './styles/App.css';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import CleanLayout from './layouts/CleanLayout';
+import CleanLayout2 from './layouts/CleanLayout2';
 import DocLayout from './layouts/DocLayout';
 import PxLayout from './layouts/PxLayout';
 import AdminLayout from './layouts/AdminLayout';
@@ -27,12 +28,8 @@ export default function App() {
 					<Route index element={<Landing />} />
 				</Route>
 				{/* Paginas publicas (no requieren autenticacion) */}
-				<Route element={<CleanLayout />}>
+				<Route element={<CleanLayout2 />}>
 					<Route path='/login' element={<Login />} />
-					<Route
-						path='/select-register-type'
-						element={<RegisterSelect />}
-					/>
 					<Route
 						path='/register-as-doctor'
 						element={<RegisterDoc />}
@@ -42,6 +39,12 @@ export default function App() {
 						element={<RegisterPx />}
 					/>
 					<Route path='/login/admin' element={<LoginAdmin />} />
+				</Route>
+				<Route element={<CleanLayout />}>
+					<Route
+						path='/select-register-type'
+						element={<RegisterSelect />}
+					/>
 				</Route>
 
 				{/* Paginas de administrador */}

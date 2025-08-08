@@ -8,7 +8,7 @@ import '../styles/App.css';
 export default function Landing() {
 	return (
 		<>
-			<div className='bg-white p-4 ml-4 mr-4 mt-20 flex justify-between mb-20'>
+			<div className='bg-white p-4 ml-4 mr-4 mt-10 flex mb-20 row-to-col gap-y-10 gap-x-40 items-center justify-self-center'>
 				<div className='flex flex-col'>
 					<div className='text-nutrisys-primary-500 font-kodchasan font-bold text-6xl'>
 						Conecta con tu nutriólogo ideal
@@ -32,7 +32,7 @@ export default function Landing() {
 						</Link>
 					</div>
 				</div>
-				<div className='flex flex-col items-center pr-24'>
+				<div className='flex flex-col items-center'>
 					<img
 						src={nutrisysLogo}
 						className=' h-64 w-64'
@@ -40,13 +40,13 @@ export default function Landing() {
 					/>
 				</div>
 			</div>
-			<div className='bg-nutrisys-background-200 p-4 ml-4 mr-4 items-center justify-items-center flex flex-col w-full'>
+			<div className='bg-nutrisys-background-200 p-4 ml-4 mr-4 items-center justify-items-center flex flex-col w-full justify-self-center h-fit pb-8'>
 				<span className='w-full text-nutrisys-primary-500 rounded-2xl font-kodchasan font-bold text-center text-4xl'>
 					¿Cómo funciona?
 				</span>
-				<div className='flex justify-center gap-40 mt-6'>
+				<div className='flex justify-center gap-x-40 gap-y-10 mt-10 row-to-col h-fit'>
 					<div className='flex flex-col items-center'>
-						<div class='w-12 h-12 bg-nutrisys-primary-500 text-white rounded-full flex items-center justify-center text-xl font-kodchasan font-bold'>
+						<div className='w-12 h-12 bg-nutrisys-primary-500 text-white rounded-full flex items-center justify-center text-xl font-kodchasan font-bold'>
 							1
 						</div>
 						<span className='text-nutrisys-primary-500 rounded-2xl font-kodchasan font-bold text-center text-lg'>
@@ -60,7 +60,7 @@ export default function Landing() {
 						</span>
 					</div>
 					<div className='flex flex-col items-center'>
-						<div class='w-12 h-12 bg-nutrisys-secondary-500 text-white rounded-full flex items-center justify-center text-xl font-kodchasan font-bold'>
+						<div className='w-12 h-12 bg-nutrisys-secondary-500 text-white rounded-full flex items-center justify-center text-xl font-kodchasan font-bold'>
 							2
 						</div>
 						<span className='text-nutrisys-secondary-500 rounded-2xl font-kodchasan font-bold text-center text-lg'>
@@ -74,7 +74,7 @@ export default function Landing() {
 						</span>
 					</div>
 					<div className='flex flex-col items-center'>
-						<div class='w-12 h-12 bg-nutrisys-primary-500 text-white rounded-full flex items-center justify-center text-xl font-kodchasan font-bold'>
+						<div className='w-12 h-12 bg-nutrisys-primary-500 text-white rounded-full flex items-center justify-center text-xl font-kodchasan font-bold'>
 							3
 						</div>
 						<span className='text-nutrisys-primary-500 rounded-2xl font-kodchasan font-bold text-center text-lg'>
