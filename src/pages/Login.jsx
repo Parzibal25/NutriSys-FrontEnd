@@ -11,17 +11,13 @@ export default function Login() {
 		<>
 			<div className='flex-row w-full h-full flex'>
 				<div className='bg-nutrisys-background-200 w-half h-full justify-center flex'>
-					<div className='w-fit h-fit justify-between gap-10 flex mt-48'>
-						<div className='flex flex-col items-start justify-center'>
-							<span className='font-kodchasan font-bold text-nutrisys-primary-500 text-4xl'>
-								Bienvenido de vuelta
-							</span>
-							<br />
-							<span className='font-montserrat font-normal text-xl'>
-								Inicia sesión para continuar conectando con tu
-								salud
-							</span>
-						</div>
+					<div className='w-fit h-fit justify-between items-center gap-y-10 flex flex-col mt-48'>
+						<span className='font-kodchasan font-bold text-nutrisys-primary-500 text-4xl'>
+							Bienvenido de vuelta
+						</span>
+						<span className='font-montserrat font-normal text-xl'>
+							Inicia sesión para continuar conectando con tu salud
+						</span>
 						<div className='rounded-full bg-white items-center'>
 							<FontAwesomeIcon
 								icon={faUser}
@@ -30,8 +26,8 @@ export default function Login() {
 						</div>
 					</div>
 				</div>
-				<div className='w-half h-full justify-center flex'>
-					<form className='w-third h-fit flex mt-36 flex-col gap-y-5'>
+				<div className='w-half h-full overflow-y-auto justify-center flex'>
+					<form className='w-half h-fit flex mt-36 flex-col gap-y-5'>
 						<span className='font-Kodchasan font-bold text-4xl text-nutrisys-primary-500 text-center'>
 							Iniciar Sesión
 						</span>

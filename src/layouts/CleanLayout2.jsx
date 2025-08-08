@@ -8,7 +8,7 @@ export default function CleanLayout2() {
 
 	return (
 		<>
-			<nav className='bg-transparent flex justify-between items-center'>
+			<nav className='bg-transparent flex justify-between items-center h-20'>
 				<div className='w-half bg-nutrisys-background-200 h-full p-4'>
 					<Link to='/' className='flex items-center'>
 						<img
@@ -24,7 +24,7 @@ export default function CleanLayout2() {
 
 				<div className='w-half'></div>
 			</nav>
-			<main className='w-full h-full'>
+			<main className='w-full flex-1 overflow-hidden'>
 				<Outlet />
 			</main>
 		</>
