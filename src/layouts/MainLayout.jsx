@@ -1,11 +1,8 @@
 import { Link, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import nutrisysLogoNoText from '/logo/logo-no-text.svg';
 import '../styles/App.css';
 
 export default function MainLayout() {
-	const { user } = useAuth();
-
 	return (
 		<>
 			<nav className='bg-white flex justify-between items-center pl-4 pr-4 h-24 w-full'>
@@ -28,7 +25,7 @@ export default function MainLayout() {
 						Inicia Sesión
 					</Link>
 					<Link
-						to='/select-register-type'
+						to='/register/select-type'
 						className='flex bg-nutrisys-primary-500 border-nutrisys-primary-500 text-white border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl font-kodchasan font-bold text-center items-center'
 					>
 						Regístrate

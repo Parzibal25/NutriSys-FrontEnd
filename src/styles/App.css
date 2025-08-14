@@ -9,6 +9,7 @@
 	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
+	overflow-y: hidden;
 }
 
 .logo {
@@ -92,4 +93,15 @@
 	.row-to-col {
 		flex-direction: row;
 	}
+}
+
+.button {
+	border: 2px solid;
+	border-radius: 1rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+	font-family: 'Kodchasan', sans-serif;
+	@apply font-semibold;
 }

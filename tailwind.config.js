@@ -41,6 +41,7 @@ export default {
 					800: '#557c5f',
 					900: '#375d43',
 				},
+				error: '#e53935',
 			},
 			fontFamily: {
 				kodchasan: ['Kodchasan', 'sans-serif'],

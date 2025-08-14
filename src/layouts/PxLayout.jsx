@@ -1,9 +1,8 @@
-import { Link, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import nutrisysLogoNoText from '/logo/logo-no-text.svg';
 
 export default function PxLayout() {
-	const { user } = useAuth();
+	const location = useLocation();
 
 	return (
 		<>
@@ -21,20 +20,58 @@ export default function PxLayout() {
 
 				<div className='flex gap-4'>
 					<Link
-						to='/'
-						className='bg-white border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 text-nutrisys-primary-500 rounded-2xl'
+						to='/px/landing'
+						className={`${
+							location.pathname === '/px/landing'
+								? 'bg-nutrisys-primary-500 text-white'
+								: 'bg-white text-nutrisys-primary-500'
+						} border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl button`}
 					>
-						Inicia Sesión
+						Inicio
 					</Link>
 					<Link
-						to='/login'
-						className='bg-nutrisys-primary-500 border-nutrisys-primary-500 text-white border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl'
+						to='/px/marketplace'
+						className={`${
+							location.pathname === '/px/marketplace'
+								? 'bg-nutrisys-primary-500 text-white'
+								: 'bg-white text-nutrisys-primary-500'
+						} border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl button`}
 					>
-						Regístrate
+						Marketplace
+					</Link>
+					<Link
+						to='/px/plan'
+						className={`${
+							location.pathname === '/px/plan'
+								? 'bg-nutrisys-primary-500 text-white'
+								: 'bg-white text-nutrisys-primary-500'
+						} border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl button`}
+					>
+						Plan alimenticio
+					</Link>
+					<Link
+						to='/px/nutricionista'
+						className={`${
+							location.pathname === '/px/nutricionista'
+								? 'bg-nutrisys-primary-500 text-white'
+								: 'bg-white text-nutrisys-primary-500'
+						} border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl button`}
+					>
+						Mi nutricionista
+					</Link>
+					<Link
+						to='/px/perfil'
+						className={`${
+							location.pathname === '/px/perfil'
+								? 'bg-nutrisys-primary-500 text-white'
+								: 'bg-white text-nutrisys-primary-500'
+						} border-nutrisys-primary-500 border-2 pt-1 pb-1 pl-2 pr-2 rounded-2xl button`}
+					>
+						Perfil
 					</Link>
 				</div>
 			</nav>
-			<main className='pl-3 pr-3 w-full h-full'>
+			<main className='w-full h-full p-5'>
 				<Outlet />
 			</main>
 		</>

@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import nutrisysLogoNoText from '/logo/logo-no-text.svg';
 import './styles/App.css';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
@@ -18,6 +16,11 @@ import LoginAdmin from './pages/admin/LoginAdmin';
 import LandingAdmin from './pages/admin/LandingAdmin';
 import LandingDoc from './pages/doc/LandingDoc';
 import LandingPx from './pages/px/LandingPx';
+import MarketplaceDoc from './pages/doc/MarketplaceDoc';
+import AgendaDoc from './pages/doc/AgendaDoc';
+import PatientsDoc from './pages/doc/PatientsDoc';
+import ProfileDoc from './pages/doc/ProfileDoc';
+import NotFound from './pages/NotFound';
 
 export default function App() {
 	return (
@@ -30,19 +33,13 @@ export default function App() {
 				{/* Paginas publicas (no requieren autenticacion) */}
 				<Route element={<CleanLayout2 />}>
 					<Route path='/login' element={<Login />} />
-					<Route
-						path='/register-as-doctor'
-						element={<RegisterDoc />}
-					/>
-					<Route
-						path='/register-as-patient'
-						element={<RegisterPx />}
-					/>
+					<Route path='/register/doctor' element={<RegisterDoc />} />
+					<Route path='/register/patient' element={<RegisterPx />} />
 					<Route path='/login/admin' element={<LoginAdmin />} />
 				</Route>
 				<Route element={<CleanLayout />}>
 					<Route
-						path='/select-register-type'
+						path='/register/select-type'
 						element={<RegisterSelect />}
 					/>
 				</Route>
@@ -61,27 +58,32 @@ export default function App() {
 
 				{/* Paginas de nutricionista */}
 				<Route
-					path='/doctor'
+					path='/doc'
 					element={
 						<RequireAuth allowedRoles={['doctor']}>
 							<DocLayout />
 						</RequireAuth>
 					}
 				>
-					<Route path='landing-doctor' element={<LandingDoc />} />
+					<Route path='landing' element={<LandingDoc />} />
+					<Route path='marketplace' element={<MarketplaceDoc />} />
+					<Route path='agenda' element={<AgendaDoc />} />
+					<Route path='pacientes' element={<PatientsDoc />} />
+					<Route path='perfil' element={<ProfileDoc />} />
 				</Route>
 
 				{/* Paginas de paciente */}
 				<Route
-					path='/'
+					path='/px'
 					element={
-						<RequireAuth allowedRoles={['patient']}>
+						<RequireAuth allowedRoles={['paciente']}>
 							<PxLayout />
 						</RequireAuth>
 					}
 				>
-					<Route path='/landing-doctor' element={<LandingPx />} />
+					<Route path='landing' element={<LandingPx />} />
 				</Route>
+				<Route path='*' element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>
 	);

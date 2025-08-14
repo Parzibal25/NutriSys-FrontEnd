@@ -1,13 +1,31 @@
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-	// Simulamos un usuario autenticado con un rol
-	const [user, setUser] = useState({ isAuthenticated: true, role: 'doctor' }); // Cambia el rol a 'admin' o 'patient'
+	const [user, setUser] = useState(() => {
+		const storedUser = sessionStorage.getItem('user');
+		return storedUser ? JSON.parse(storedUser) : null;
+	});
+
+	useEffect(() => {
+		if (user) {
+			sessionStorage.setItem('user', JSON.stringify(user));
+		} else {
+			sessionStorage.removeItem('user');
+		}
+	}, [user]);
+
+	const login = (userData) => {
+		setUser(userData); // userData: { role, isAuthenticated, name }
+	};
+
+	const logout = () => {
+		setUser(null);
+	};
 
 	return (
-		<AuthContext.Provider value={{ user, setUser }}>
+		<AuthContext.Provider value={{ user, login, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);

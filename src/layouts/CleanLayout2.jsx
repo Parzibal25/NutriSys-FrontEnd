@@ -1,11 +1,8 @@
 import { Link, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import nutrisysLogoNoText from '/logo/logo-no-text.svg';
 import '../styles/App.css';
 
 export default function CleanLayout2() {
-	const { user } = useAuth();
-
 	return (
 		<>
 			<nav className='bg-transparent flex justify-between items-center h-20'>

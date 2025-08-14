@@ -1,11 +1,56 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import '../styles/App.css';
 import { Form, Link, Outlet } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
-	const [count, setCount] = useState(0);
+	const { login } = useAuth();
+	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+	useEffect(() => {
+		const unauthorized = searchParams.get('unauthorized');
+		const unauthenticaded = searchParams.get('unauthenticaded');
+		if (unauthorized) {
+			alert('No tienes permiso para acceder a esta página.');
+		}
+		if (unauthenticaded) {
+			alert('Inicia sesion para acceder a esa pagina.');
+		}
+	}, [searchParams]);
+
+	function handleLogin(event) {
+		event.preventDefault();
+		const email = event.target.email.value;
+		const password = event.target.pwd.value;
+
+		if (password == 'paciente') {
+			login({
+				role: 'paciente',
+				isAuthenticated: true,
+				name: 'Paciente_Prueba',
+			});
+			navigate('/px/landing');
+		} else if (password == 'doctor') {
+			login({
+				role: 'doctor',
+				isAuthenticated: true,
+				name: 'Nutricionista_Prueba',
+			});
+			navigate('/doc/landing');
+		} else if (password == 'admin') {
+			login({
+				role: 'admin',
+				isAuthenticated: true,
+				name: 'ADMIN_Prueba',
+			});
+			navigate('/admin/landing');
+		} else {
+			alert('Credenciales incorrectas');
+		}
+	}
 
 	return (
 		<>
@@ -27,7 +72,10 @@ export default function Login() {
 					</div>
 				</div>
 				<div className='w-half h-full overflow-y-auto justify-center flex'>
-					<form className='w-half h-fit flex mt-36 flex-col gap-y-5'>
+					<form
+						className='w-half h-fit flex mt-36 flex-col gap-y-5'
+						onSubmit={handleLogin}
+					>
 						<span className='font-Kodchasan font-bold text-4xl text-nutrisys-primary-500 text-center'>
 							Iniciar Sesión
 						</span>

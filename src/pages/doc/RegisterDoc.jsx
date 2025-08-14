@@ -149,7 +149,7 @@ export default function RegisterDoc() {
 							¿Ya tienes una cuenta?{' '}
 							<Link
 								className='font-montserrat font-bold text-sm text-nutrisys-primary-500'
-								to='/select-register-type'
+								to='/login'
 							>
 								Inicia sesión
 							</Link>
