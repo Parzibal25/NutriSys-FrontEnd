@@ -6,14 +6,16 @@ import { useNavigate } from 'react-router-dom';
 export default function NotFound() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	function redirect() {
-		if (user.isAuthenticated) {
-			if (user.role === 'patient') {
+	function redirect(e) {
+		if (user && user.isAuthenticated) {
+			if (user.role === 'paciente') {
 				navigate('/px/landing');
 			} else if (user.role === 'doctor') {
 				navigate('/doc/landing');
 			} else if (user.role === 'admin') {
 				navigate('/admin/landing');
+			} else {
+				navigate('/');
 			}
 		} else {
 			navigate('/');

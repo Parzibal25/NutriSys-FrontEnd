@@ -21,6 +21,10 @@ import AgendaDoc from './pages/doc/AgendaDoc';
 import PatientsDoc from './pages/doc/PatientsDoc';
 import ProfileDoc from './pages/doc/ProfileDoc';
 import NotFound from './pages/NotFound';
+import MarketplacePx from './pages/px/MarketplacePx';
+import MiNutricionista from './pages/px/MiNutricionista';
+import PlanPx from './pages/px/PlanPx';
+import ProfilePx from './pages/px/ProfilePx';
 
 export default function App() {
 	return (
@@ -82,6 +86,10 @@ export default function App() {
 					}
 				>
 					<Route path='landing' element={<LandingPx />} />
+					<Route path='marketplace' element={<MarketplacePx />} />
+					<Route path='plan' element={<PlanPx />} />
+					<Route path='nutricionista' element={<MiNutricionista />} />
+					<Route path='perfil' element={<ProfilePx />} />
 				</Route>
 				<Route path='*' element={<NotFound />} />
 			</Routes>
