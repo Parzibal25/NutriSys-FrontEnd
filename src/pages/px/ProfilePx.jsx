@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export default function ProfilePx() {
-	const { setUser } = useAuth();
+	const { logout } = useAuth();
 	const navigate = useNavigate();
 	const [isEditing, setIsEditing] = useState(false);
 	const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -55,11 +55,7 @@ export default function ProfilePx() {
 	});
 
 	function handleLogout() {
-		setUser({
-			isAuthenticated: false,
-			role: '',
-			name: '',
-		});
+		logout();
 		navigate('/login');
 	}
 
