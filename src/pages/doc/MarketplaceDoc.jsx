@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, use } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
 	faSearch,
@@ -15,41 +15,41 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function MarketplaceDoc() {
-	// Estados para productos
-	const [products, setProducts] = useState([
-		{
-			id: 1,
-			name: 'Proteína Whey Premium',
-			description:
-				'Proteína de suero de alta calidad para desarrollo muscular',
-			price: 850,
-			stock: 25,
-			available: true,
-			image: null,
-		},
-		{
-			id: 2,
-			name: 'Multivitamínico Completo',
-			description: 'Complejo vitamínico con minerales esenciales',
-			price: 420,
-			stock: 0,
-			available: false,
-			image: null,
-		},
-		{
-			id: 3,
-			name: 'Omega 3 Premium',
-			description: 'Aceite de pescado purificado con EPA y DHA',
-			price: 650,
-			stock: 15,
-			available: true,
-			image: null,
-		},
-	]);
+	const [products, setProducts] = useState([]);
+
+	function fetchProducts() {
+		fetch('http://127.0.0.1:8000/api/productos/', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error('Error al obtener los productos');
+				}
+				return response.json();
+			})
+			.then((data) => {
+				const updatedData = data.map((product) => ({
+					...product,
+					available: product.cantidad_disponible > 0,
+				}));
+
+				setProducts(updatedData);
+			})
+			.catch((error) => {
+				console.error('Error fetching products:', error);
+			});
+	}
+
+	useEffect(() => {
+		fetchProducts();
+	}, []);
 
 	// Estados para filtros y búsqueda
 	const [searchTerm, setSearchTerm] = useState('');
-	const [sortBy, setSortBy] = useState('name');
+	const [sortBy, setSortBy] = useState('nombre');
 	const [sortOrder, setSortOrder] = useState('asc');
 	const [filterAvailable, setFilterAvailable] = useState('all');
 
@@ -57,12 +57,14 @@ export default function MarketplaceDoc() {
 	const [selectedProduct, setSelectedProduct] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
 	const [editForm, setEditForm] = useState({
-		name: '',
-		description: '',
-		price: '',
-		stock: '',
+		id: null,
+		nombre: '',
+		descripcion: '',
+		precio: 0,
+		cantidad_disponible: '',
 		available: true,
-		image: null,
+		imagen_url: null,
+		nutricionista: '',
 	});
 
 	// Estados para modales
@@ -72,7 +74,7 @@ export default function MarketplaceDoc() {
 	// Filtrar y ordenar productos
 	const filteredProducts = products
 		.filter((product) => {
-			const matchesSearch = product.name
+			const matchesSearch = product.nombre
 				.toLowerCase()
 				.includes(searchTerm.toLowerCase());
 			const matchesAvailability =
@@ -85,17 +87,17 @@ export default function MarketplaceDoc() {
 			let valueA, valueB;
 
 			switch (sortBy) {
-				case 'price':
-					valueA = a.price;
-					valueB = b.price;
+				case 'precio':
+					valueA = a.precio;
+					valueB = b.precio;
 					break;
-				case 'stock':
-					valueA = a.stock;
-					valueB = b.stock;
+				case 'cantidad_disponible':
+					valueA = a.cantidad_disponible;
+					valueB = b.cantidad_disponible;
 					break;
 				default:
-					valueA = a.name.toLowerCase();
-					valueB = b.name.toLowerCase();
+					valueA = a.nombre.toLowerCase();
+					valueB = b.nombre.toLowerCase();
 			}
 
 			if (sortOrder === 'asc') {
@@ -124,12 +126,14 @@ export default function MarketplaceDoc() {
 		setSelectedProduct(product);
 		setIsCreating(false);
 		setEditForm({
-			name: product.name,
-			description: product.description,
-			price: product.price.toString(),
-			stock: product.stock.toString(),
+			id: product.id,
+			nutricionista: product.nutricionista,
+			nombre: product.nombre,
+			descripcion: product.descripcion,
+			precio: product.precio.toString(),
+			cantidad_disponible: product.cantidad_disponible.toString(),
 			available: product.available,
-			image: product.image,
+			imagen_url: product.imagen_url,
 		});
 	};
 
@@ -137,49 +141,81 @@ export default function MarketplaceDoc() {
 		setSelectedProduct(null);
 		setIsCreating(true);
 		setEditForm({
-			name: '',
-			description: '',
-			price: '',
-			stock: '',
+			id: null,
+			nutricionista: '1',
+			nombre: '',
+			descripcion: '',
+			precio: '',
+			cantidad_disponible: '',
 			available: true,
-			image: null,
+			imagen_url: null,
 		});
 	};
 
 	const handleSave = () => {
 		if (
-			!editForm.name ||
-			!editForm.description ||
-			!editForm.price ||
-			!editForm.stock
+			!editForm.nombre ||
+			!editForm.descripcion ||
+			!editForm.precio ||
+			!editForm.cantidad_disponible
 		) {
 			alert('Por favor complete todos los campos obligatorios');
 			return;
 		}
 
 		const productData = {
-			name: editForm.name,
-			description: editForm.description,
-			price: parseFloat(editForm.price),
-			stock: parseInt(editForm.stock),
+			id: editForm.id,
+			nutricionista: editForm.nutricionista,
+			nombre: editForm.nombre,
+			descripcion: editForm.descripcion,
+			precio: parseFloat(editForm.precio),
+			cantidad_disponible: parseInt(editForm.cantidad_disponible),
 			available: editForm.available,
-			image: editForm.image,
+			imagen_url: editForm.imagen_url,
 		};
 
+		if (!editForm.imagen_url) {
+			productData.imagen_url = 'https://via.placeholder.com/150';
+		}
+
 		if (isCreating) {
-			const newProduct = {
-				...productData,
-				id: Math.max(...products.map((p) => p.id)) + 1,
-			};
-			setProducts([...products, newProduct]);
-			alert('Producto creado exitosamente');
+			fetch('http://127.0.0.1:8000/api/productos/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(productData),
+			})
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error('Error al crear el producto');
+					}
+					alert('Producto creado exitosamente');
+					fetchProducts();
+					return response.json();
+				})
+				.catch((error) => {
+					console.error('Error creating products:', error);
+				});
 		} else {
-			setProducts(
-				products.map((p) =>
-					p.id === selectedProduct.id ? { ...p, ...productData } : p
-				)
-			);
-			alert('Producto actualizado exitosamente');
+			fetch(`http://127.0.0.1:8000/api/productos/${editForm.id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(productData),
+			})
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error('Error al actualizar el producto');
+					}
+					alert('Producto actualizado exitosamente');
+					fetchProducts();
+					return response.json();
+				})
+				.catch((error) => {
+					console.error('Error updating products:', error);
+				});
 		}
 
 		setSelectedProduct(null);
@@ -192,22 +228,42 @@ export default function MarketplaceDoc() {
 	};
 
 	const confirmDelete = () => {
-		setProducts(products.filter((p) => p.id !== productToDelete.id));
+		fetch(`http://127.0.0.1:8000/api/productos/${editForm.id}/`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error('Error al eliminar el producto');
+				}
+				alert('Producto eliminado exitosamente');
+				fetchProducts();
+			})
+			.catch((error) => {
+				console.error('Error deleting product:', error);
+			});
+
 		setShowDeleteModal(false);
 		setProductToDelete(null);
-		if (selectedProduct && selectedProduct.id === productToDelete.id) {
+
+		if (
+			selectedProduct &&
+			productToDelete &&
+			selectedProduct.id === productToDelete.id
+		) {
 			setSelectedProduct(null);
 			setIsCreating(false);
 		}
-		alert('Producto eliminado exitosamente');
 	};
 
-	const handleImageUpload = (e) => {
+	const handleimagen_urlUpload = (e) => {
 		const file = e.target.files[0];
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = (e) => {
-				setEditForm({ ...editForm, image: e.target.result });
+				setEditForm({ ...editForm, imagen_url: e.target.result });
 			};
 			reader.readAsDataURL(file);
 		}
@@ -271,46 +327,48 @@ export default function MarketplaceDoc() {
 						{/* Ordenamiento */}
 						<div className='flex gap-2 mb-4'>
 							<button
-								onClick={() => handleSort('name')}
+								onClick={() => handleSort('nombre')}
 								className={`button flex-1 text-xs py-2 ${
-									sortBy === 'name'
+									sortBy === 'nombre'
 										? 'bg-nutrisys-primary-200 text-black font-bold border border-nutrisys-primary-500'
 										: 'bg-gray-200 text-gray-700'
 								}`}
 							>
 								<FontAwesomeIcon
-									icon={getSortIcon('name')}
+									icon={getSortIcon('nombre')}
 									className='mr-1'
 								/>
 								Nombre
 							</button>
 							<button
-								onClick={() => handleSort('price')}
+								onClick={() => handleSort('precio')}
 								className={`button flex-1 text-xs py-2 ${
-									sortBy === 'price'
+									sortBy === 'precio'
 										? 'bg-nutrisys-primary-200 text-black font-bold border border-nutrisys-primary-500'
 										: 'bg-gray-200 text-gray-700'
 								}`}
 							>
 								<FontAwesomeIcon
-									icon={getSortIcon('price')}
+									icon={getSortIcon('precio')}
 									className='mr-1'
 								/>
 								Precio
 							</button>
 							<button
-								onClick={() => handleSort('stock')}
+								onClick={() =>
+									handleSort('cantidad_disponible')
+								}
 								className={`button flex-1 text-xs py-2 ${
-									sortBy === 'stock'
+									sortBy === 'cantidad_disponible'
 										? 'bg-nutrisys-primary-200 text-black font-bold border border-nutrisys-primary-500'
 										: 'bg-gray-200 text-gray-700'
 								}`}
 							>
 								<FontAwesomeIcon
-									icon={getSortIcon('stock')}
+									icon={getSortIcon('cantidad_disponible')}
 									className='mr-1'
 								/>
-								Stock
+								stock
 							</button>
 						</div>
 
@@ -338,7 +396,7 @@ export default function MarketplaceDoc() {
 							>
 								<div className='flex justify-between items-start mb-2'>
 									<h3 className='font-medium text-gray-800 text-sm'>
-										{product.name}
+										{product.nombre}
 									</h3>
 									<span
 										className={`text-xs px-2 py-1 rounded ${
@@ -353,14 +411,15 @@ export default function MarketplaceDoc() {
 									</span>
 								</div>
 								<p className='text-gray-600 text-xs mb-2 line-clamp-2'>
-									{product.description}
+									{product.descripcion}
 								</p>
 								<div className='flex justify-between items-center'>
 									<span className='font-bold text-nutrisys-primary'>
-										L. {product.price}
+										L. {product.precio}
 									</span>
 									<span className='text-xs text-gray-500'>
-										Stock: {product.stock}
+										cantidad_disponible:{' '}
+										{product.cantidad_disponible}
 									</span>
 								</div>
 							</div>
@@ -395,16 +454,16 @@ export default function MarketplaceDoc() {
 							</div>
 
 							<div className='space-y-6'>
-								{/* Imagen del Producto */}
+								{/* imagen del Producto */}
 								<div>
 									<label className='block text-sm font-medium text-gray-700 mb-2'>
-										Imagen del Producto
+										imagen del Producto
 									</label>
 									<div className='flex items-center space-x-4 flex-row'>
 										<div className='w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50'>
-											{editForm.image ? (
+											{editForm.imagen_url ? (
 												<img
-													src={editForm.image}
+													src={editForm.imagen_url}
 													alt='Preview'
 													className='w-full h-full object-cover rounded-lg'
 												/>
@@ -419,7 +478,7 @@ export default function MarketplaceDoc() {
 											type='file'
 											id='file-upload'
 											accept='image/*'
-											onChange={handleImageUpload}
+											onChange={handleimagen_urlUpload}
 											className='hidden'
 										/>
 										{/*Inout file personalizado*/}
@@ -431,11 +490,11 @@ export default function MarketplaceDoc() {
 										</label>
 
 										{/* Nombre del archivo */}
-										{editForm.image && (
+										{editForm.imagen_url && (
 											<span className='text-sm font-semibold text-gray-600 truncate w-half'>
 												Archivo seleccionado:{' '}
-												{editForm.image
-													? `${editForm.image}`
+												{editForm.imagen_url
+													? `${editForm.imagen_url}`
 													: 'No se ha seleccionado ningun archivo'}
 											</span>
 										)}
@@ -451,11 +510,11 @@ export default function MarketplaceDoc() {
 										type='text'
 										className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nutrisys-primary'
 										placeholder='Ingrese el nombre del producto'
-										value={editForm.name}
+										value={editForm.nombre}
 										onChange={(e) =>
 											setEditForm({
 												...editForm,
-												name: e.target.value,
+												nombre: e.target.value,
 											})
 										}
 									/>
@@ -470,17 +529,17 @@ export default function MarketplaceDoc() {
 										rows={4}
 										className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nutrisys-primary'
 										placeholder='Describa el producto, beneficios, ingredientes, etc.'
-										value={editForm.description}
+										value={editForm.descripcion}
 										onChange={(e) =>
 											setEditForm({
 												...editForm,
-												description: e.target.value,
+												descripcion: e.target.value,
 											})
 										}
 									/>
 								</div>
 
-								{/* Precio y Stock */}
+								{/* Precio y cantidad_disponible */}
 								<div className='grid grid-cols-2 gap-4'>
 									<div>
 										<label className='block text-sm font-medium text-gray-700 mb-2'>
@@ -492,29 +551,30 @@ export default function MarketplaceDoc() {
 											step='0.01'
 											className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nutrisys-primary'
 											placeholder='0.00'
-											value={editForm.price}
+											value={editForm.precio}
 											onChange={(e) =>
 												setEditForm({
 													...editForm,
-													price: e.target.value,
+													precio: e.target.value,
 												})
 											}
 										/>
 									</div>
 									<div>
 										<label className='block text-sm font-medium text-gray-700 mb-2'>
-											Cantidad en Stock *
+											Cantidad en stock *
 										</label>
 										<input
 											type='number'
 											min='0'
 											className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nutrisys-primary'
 											placeholder='0'
-											value={editForm.stock}
+											value={editForm.cantidad_disponible}
 											onChange={(e) =>
 												setEditForm({
 													...editForm,
-													stock: e.target.value,
+													cantidad_disponible:
+														e.target.value,
 												})
 											}
 										/>
@@ -565,7 +625,7 @@ export default function MarketplaceDoc() {
 									</div>
 									<button
 										onClick={handleSave}
-										className='button bg-nutrisys-primary text-white px-6 py-2 hover:bg-nutrisys-primary/90'
+										className='button bg-nutrisys-primary-500 text-white px-6 py-2 hover:bg-nutrisys-primary/90'
 									>
 										<FontAwesomeIcon
 											icon={faSave}
@@ -606,7 +666,7 @@ export default function MarketplaceDoc() {
 						</h3>
 						<p className='text-gray-600 mb-6'>
 							¿Estás seguro de que deseas eliminar el producto "
-							{productToDelete?.name}"? Esta acción no se puede
+							{productToDelete?.nombre}"? Esta acción no se puede
 							deshacer.
 						</p>
 						<div className='flex justify-end space-x-4'>
