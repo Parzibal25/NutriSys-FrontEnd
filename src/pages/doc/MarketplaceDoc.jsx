@@ -18,7 +18,7 @@ export default function MarketplaceDoc() {
 	const [products, setProducts] = useState([]);
 
 	function fetchProducts() {
-		fetch('http://127.0.0.1:8000/api/productos/', {
+		fetch(`http://127.0.0.1:8000/api/productos/`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -31,7 +31,12 @@ export default function MarketplaceDoc() {
 				return response.json();
 			})
 			.then((data) => {
-				const updatedData = data.map((product) => ({
+				const userId = sessionStorage.getItem('user_id');
+				const filteredData = data.filter(
+					(product) => product.nutricionista === parseInt(userId)
+				);
+
+				const updatedData = filteredData.map((product) => ({
 					...product,
 					available: product.cantidad_disponible > 0,
 				}));
@@ -45,6 +50,7 @@ export default function MarketplaceDoc() {
 
 	useEffect(() => {
 		fetchProducts();
+		console.log(sessionStorage.getItem('user_id'));
 	}, []);
 
 	// Estados para filtros y búsqueda
@@ -64,7 +70,7 @@ export default function MarketplaceDoc() {
 		cantidad_disponible: '',
 		available: true,
 		imagen_url: null,
-		nutricionista: '',
+		nutricionista: sessionStorage.getItem('user_id'),
 	});
 
 	// Estados para modales
@@ -142,7 +148,7 @@ export default function MarketplaceDoc() {
 		setIsCreating(true);
 		setEditForm({
 			id: null,
-			nutricionista: '1',
+			nutricionista: sessionStorage.getItem('user_id'),
 			nombre: '',
 			descripcion: '',
 			precio: '',
@@ -165,7 +171,7 @@ export default function MarketplaceDoc() {
 
 		const productData = {
 			id: editForm.id,
-			nutricionista: editForm.nutricionista,
+			nutricionista: parseInt(editForm.nutricionista),
 			nombre: editForm.nombre,
 			descripcion: editForm.descripcion,
 			precio: parseFloat(editForm.precio),
