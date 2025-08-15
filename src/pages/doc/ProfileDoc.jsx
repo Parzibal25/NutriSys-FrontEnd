@@ -35,6 +35,9 @@ export default function ProfileDoc() {
 		dni: '0801-1990-12345',
 		consultoryAddress: 'Colonia Palmira, Bloque M, Casa 15',
 		consultoryPhone: '+504 2234-5678',
+		nombre_consultorio: 'NutriSalud',
+		bio: 'Nutricionista con más de 10 años de experiencia en el área de la salud y nutrición. Especializada en nutrición clínica y deportiva, con un enfoque en la prevención y tratamiento de enfermedades a través de una alimentación balanceada.',
+		numero_licencia: 'NUT-123456',
 		degrees: [
 			{
 				university: 'Universidad Nacional Autónoma de Honduras',
@@ -274,16 +277,30 @@ export default function ProfileDoc() {
 									className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-nutrisys-primary-500 focus:border-nutrisys-primary-500 disabled:bg-gray-50'
 								/>
 							</div>
+							<div className='col-span-2'>
+								<label className='block text-sm font-medium text-gray-700 mb-1'>
+									Biografía
+								</label>
+								<textarea
+									value={profileData.bio}
+									onChange={(e) =>
+										handleInputChange('bio', e.target.value)
+									}
+									disabled={!isEditing}
+									rows={3}
+									className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-nutrisys-primary-500 focus:border-nutrisys-primary-500 disabled:bg-gray-50 resize-none'
+								/>
+							</div>
 						</div>
 					</div>
 
 					{/* Datos de Contacto */}
 					<div>
 						<h2 className='text-xl font-semibold text-nutrisys-primary-700 mb-4 border-b border-gray-200 pb-2'>
-							Datos de Contacto
+							Datos de la cuenta
 						</h2>
-						<div className='grid grid-cols-1 gap-4'>
-							<div>
+						<div className='flex flex-row gap-4'>
+							<div className='w-1/2'>
 								<label className='block text-sm font-medium text-gray-700 mb-1'>
 									Email
 								</label>
@@ -300,7 +317,7 @@ export default function ProfileDoc() {
 									className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-nutrisys-primary-500 focus:border-nutrisys-primary-500 disabled:bg-gray-50'
 								/>
 							</div>
-							<div className='flex items-end gap-2'>
+							<div className='flex items-end gap-2 w-1/2'>
 								<div className='flex-1'>
 									<label className='block text-sm font-medium text-gray-700 mb-1'>
 										Contraseña
@@ -329,6 +346,42 @@ export default function ProfileDoc() {
 							Datos del Consultorio
 						</h2>
 						<div className='grid grid-cols-1 gap-4'>
+							<div className='flex flex-row gap-4'>
+								<div className='w-1/2'>
+									<label className='block text-sm font-medium text-gray-700 mb-1'>
+										Nombre del Consultorio
+									</label>
+									<input
+										type='text'
+										value={profileData.nombre_consultorio}
+										onChange={(e) =>
+											handleInputChange(
+												'nombre_consultorio',
+												e.target.value
+											)
+										}
+										disabled={!isEditing}
+										className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-nutrisys-primary-500 focus:border-nutrisys-primary-500 disabled:bg-gray-50'
+									/>
+								</div>
+								<div className='w-1/2'>
+									<label className='block text-sm font-medium text-gray-700 mb-1'>
+										Teléfono del Consultorio
+									</label>
+									<input
+										type='text'
+										value={profileData.consultoryPhone}
+										onChange={(e) =>
+											handleInputChange(
+												'consultoryPhone',
+												e.target.value
+											)
+										}
+										disabled={!isEditing}
+										className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-nutrisys-primary-500 focus:border-nutrisys-primary-500 disabled:bg-gray-50'
+									/>
+								</div>
+							</div>
 							<div>
 								<label className='block text-sm font-medium text-gray-700 mb-1'>
 									Dirección del Consultorio
@@ -344,23 +397,6 @@ export default function ProfileDoc() {
 									disabled={!isEditing}
 									rows={3}
 									className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-nutrisys-primary-500 focus:border-nutrisys-primary-500 disabled:bg-gray-50 resize-none'
-								/>
-							</div>
-							<div>
-								<label className='block text-sm font-medium text-gray-700 mb-1'>
-									Teléfono del Consultorio
-								</label>
-								<input
-									type='text'
-									value={profileData.consultoryPhone}
-									onChange={(e) =>
-										handleInputChange(
-											'consultoryPhone',
-											e.target.value
-										)
-									}
-									disabled={!isEditing}
-									className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-nutrisys-primary-500 focus:border-nutrisys-primary-500 disabled:bg-gray-50'
 								/>
 							</div>
 						</div>
@@ -382,6 +418,26 @@ export default function ProfileDoc() {
 									Agregar Título
 								</button>
 							)}
+						</div>
+
+						<div>
+							<div className='w-1/2 p-4'>
+								<label className='block text-sm font-medium text-gray-700 mb-1'>
+									Número de licencia
+								</label>
+								<input
+									type='text'
+									value={profileData.numero_licencia}
+									onChange={(e) =>
+										handleInputChange(
+											'numero_licencia',
+											e.target.value
+										)
+									}
+									disabled={!isEditing}
+									className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-nutrisys-primary-500 focus:border-nutrisys-primary-500 disabled:bg-gray-50'
+								/>
+							</div>
 						</div>
 						<div className='space-y-4'>
 							{profileData.degrees.map((degree, index) => (
